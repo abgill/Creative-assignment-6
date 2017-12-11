@@ -1,4 +1,5 @@
 var User = require('./models/user');
+var books = require('google-books-search');
 
 module.exports = function(app, passport) {
 
@@ -60,6 +61,22 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
+
+    app.get('/search', function (req, res) {
+        res.render('search.ejs');
+
+    })
+    
+    app.get('/searchbook/:bookTitle', function (req, res) {
+        books.search(req.params.bookTitle, function(error, results) {
+            if ( ! error ) {
+                console.log(results);
+                res.json(results);
+            } else {
+                console.log(error);
+            }
+        });
+    })
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
