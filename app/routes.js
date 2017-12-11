@@ -1,4 +1,4 @@
-var books = require('google-books-search');
+var User = require('./models/user');
 
 module.exports = function(app, passport) {
 
@@ -68,19 +68,45 @@ module.exports = function(app, passport) {
         failureFlash : true // allow flash messages
     }));
 
-    app.get('/searchbook/:book',function (req,res) {
-        books.search(req.params.book, function(error, results) {
-            if ( ! error ) {
-                //console.log(results);
-                res.json(results);
-                return;
-            } else {
-                //console.log(error);
-                res.json(error);
-                return;
-            }
-        });
+    app.get('/user',function (req, res) {
+        res.json(req.user._id);
+    });
 
+    app.put('/addBook',function (req, res) {
+        console.log("adding book");
+        console.log(req.session.passport.user.id);
+       User.findOne({_id: req.user._id}, function(err, user){
+           if (err) {
+               console.log("err finding usr");
+               res.status(500).send(err);
+           } else {
+               console.log("pusing books")
+               // Update each attribute with any possible attribute that may have been submitted in the body of the request
+               // If that attribute isn't in the request body, default back to whatever it was before.
+               if(!user.books){
+                   user.books = [];
+               }
+               user.books.push(req.body);
+
+               // Save the updated document back to the database
+               user.save((err, user) => {
+                   console.log("saving");
+                   if (err) {
+                       console.log("err saving book");
+                       res.status(500).send(err)
+                   }
+                   console.log(user.books);
+                   res.status(200).json(user.books);
+           });
+           }
+       })
+    });
+
+    app.get('/tst', function (req,res) {
+        console.log(req.user._id);
+        User.findOne({ _id: '5a2ef4357f5c85172d05e214' }, function (err, obj) {
+            console.log(obj);
+        });
     })
 };
 

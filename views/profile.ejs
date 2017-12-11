@@ -5,11 +5,12 @@
     <title>Node Authentication</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
     <style>
         body        { padding-top:80px; word-wrap:break-word; }
     </style>
 </head>
-<body>
+<body ng-app="candidate" ng-controller="MainCtrl">
 <div class="container">
 
     <div class="page-header text-center">
@@ -30,11 +31,43 @@
                     <strong>password</strong>: <%= user.local.password %>
                 </p>
 
+
+
             </div>
+
+            <form ng-submit="addBook()">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input ng-model="bookTitle" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Img</label>
+                    <input type="password" class="form-control" ng-model="imgUrl">
+                </div>
+
+                <button type="submit" class="btn btn-warning btn-lg">Add Book</button>
+            </form>
         </div>
 
     </div>
 
 </div>
+
+<script>
+    angular.module('candidate', [])
+        .controller('MainCtrl', [
+            '$scope','$http',
+            function($scope,$http){
+                $scope.test = 'Hello world!';
+
+                $scope.addBook = function () {
+                    var book = {title: $scope.bookTitle, img : $scope.imgUrl};
+                    return $http.put('/addBook', book).success(function(data){
+                        console.log(data);
+                    });
+                }
+            }
+        ]);
+</script>
 </body>
 </html>
