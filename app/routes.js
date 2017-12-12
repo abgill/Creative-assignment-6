@@ -3,38 +3,25 @@ var books = require('google-books-search');
 
 module.exports = function(app, passport) {
 
-    // =====================================
-    // HOME PAGE (with login links) ========
-    // =====================================
     app.get('/', function(req, res) {
-        res.render('index.ejs'); // load the index.ejs file
+        res.render('login.ejs', { message: req.flash('loginMessage') });
     });
 
-    // =====================================
-    // LOGIN ===============================
-    // =====================================
-    // show the login form
+
     app.get('/login', function(req, res) {
 
         // render the page and pass in any flash data if it exists
         res.render('login.ejs', { message: req.flash('loginMessage') });
     });
 
-    // process the login form
-    // app.post('/login', do all our passport stuff here);
 
-    // =====================================
-    // SIGNUP ==============================
-    // =====================================
-    // show the signup form
     app.get('/signup', function(req, res) {
 
         // render the page and pass in any flash data if it exists
         res.render('signup.ejs', { message: req.flash('signupMessage') });
     });
 
-    // process the signup form
-    // app.post('/signup', do all our passport stuff here);
+
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
@@ -43,20 +30,14 @@ module.exports = function(app, passport) {
         failureFlash : true // allow flash messages
     }));
 
-    // =====================================
-    // PROFILE SECTION =====================
-    // =====================================
-    // we will want this protected so you have to be logged in to visit
-    // we will use route middleware to verify this (the isLoggedIn function)
+
     app.get('/profile', isLoggedIn, function(req, res) {
         res.render('profile.ejs', {
             user : req.user // get the user out of session and pass to template
         });
     });
 
-    // =====================================
-    // LOGOUT ==============================
-    // =====================================
+
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
@@ -98,8 +79,7 @@ module.exports = function(app, passport) {
                res.status(500).send(err);
            } else {
                console.log("pusing books")
-               // Update each attribute with any possible attribute that may have been submitted in the body of the request
-               // If that attribute isn't in the request body, default back to whatever it was before.
+
                if(!user.books){
                    user.books = [];
                }
