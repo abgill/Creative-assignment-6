@@ -6,11 +6,24 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-    <style>
-        body        { padding-top:80px; word-wrap:break-word; }
-    </style>
 </head>
 <body ng-app="candidate" ng-controller="MainCtrl">
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">My Book Library</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/profile">My Library</a></li>
+            <li class="active"><a id="editLink" href="/search">Add Books</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a id="logoutLink" href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
 <div class="container">
 
     <div class="page-header text-center">
