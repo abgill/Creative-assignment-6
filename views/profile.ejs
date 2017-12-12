@@ -22,31 +22,14 @@
 
         <!-- LOCAL INFORMATION -->
         <div class="col-sm-6">
-            <!--<div class="well">-->
-                <!--<h3><span class="fa fa-user"></span> Local</h3>-->
 
-                <!--<p>-->
-                    <!--<strong>id</strong>: <%= user._id %><br>-->
-                    <!--<strong>email</strong>: <%= user.local.email %><br>-->
-                    <!--<strong>password</strong>: <%= user.local.password %>-->
-                <!--</p>-->
+            <div ng-repeat="book in collection">
+                <p>{{book.title}}</p>
+                <button ng-click="delBook(book)">Remove</button>
+                <img ng-src="{{book.thumbnail}}">
+                <hr>
+            </div>
 
-
-
-            <!--</div>-->
-
-            <form ng-submit="addBook()">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input ng-model="bookTitle" type="text" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>Img</label>
-                    <input type="password" class="form-control" ng-model="imgUrl">
-                </div>
-
-                <button type="submit" class="btn btn-warning btn-lg">Add Book</button>
-            </form>
         </div>
 
     </div>
@@ -59,6 +42,15 @@
             '$scope','$http',
             function($scope,$http){
                 $scope.test = 'Hello world!';
+                $scope.collection = [];
+
+
+                $scope.getCollection = function () {
+                    $http.get('/getCollection').success(function (data) {
+                        console.log(data);
+                        $scope.collection = data;
+                    })
+                }
 
                 $scope.addBook = function () {
                     var book = {title: $scope.bookTitle, img : $scope.imgUrl};
@@ -66,6 +58,15 @@
                         console.log(data);
                     });
                 }
+
+                $scope.delBook = function (book) {
+                    return $http.delete('/delBook/'+book.title).success(function (data) {
+                        console.log(data);
+                        $scope.collection = data;
+                    })
+                }
+
+                $scope.getCollection();
             }
         ]);
 </script>

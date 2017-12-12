@@ -124,7 +124,63 @@ module.exports = function(app, passport) {
         User.findOne({ _id: '5a2ef4357f5c85172d05e214' }, function (err, obj) {
             console.log(obj);
         });
-    })
+    });
+
+    app.get('/getCollection',function (req, res) {
+        User.findOne({_id: req.user._id}, function(err, user){
+            if (err) {
+                console.log("err finding usr");
+                res.status(500).send(err);
+            } else {
+
+                if(!user.books){
+                    user.books = [];
+                }
+
+
+                console.log(user.books);
+                res.status(200).json(user.books);
+            }
+        })
+    });
+
+    app.delete('/delBook/:title',function (req, res) {
+        console.log("in del route");
+        User.findOne({_id: req.user._id}, function(err, user){
+            if (err) {
+                console.log("err finding usr");
+                res.status(500).send(err);
+            } else {
+
+                if(!user.books){
+                    user.books = [];
+                }
+
+                console.log("Begining search");
+
+                for(var i = 0; i < user.books.length; i++){
+                    console.log("pass number " + i);
+                    if(user.books[i].title === req.params.title){
+                        user.books.splice(i, 1);
+                        break;
+                    }
+                }
+
+                user.save((err, user) => {
+                    console.log("saving");
+                if (err) {
+                    console.log("err saving book");
+                    res.status(500).send(err)
+                }
+                //console.log(user.books);
+                res.status(200).json(user.books);
+            });
+
+                // console.log(user.books);
+                // res.status(200).json(user.books);
+            }
+        })
+    });
 };
 
 // route middleware to make sure a user is logged in

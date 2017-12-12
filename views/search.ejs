@@ -37,6 +37,7 @@
         <div ng-repeat="book in results">
             <p>{{book.title}}</p>
             <button ng-click="addBook(book)">addBook</button>
+            <img ng-src="{{book.thumbnail}}">
             <hr>
         </div>
         </div>
@@ -58,6 +59,15 @@
                         console.log(data);
                         $scope.results = data;
                     });
+                }
+
+                $scope.addBook = function (book) {
+                    //var bookObj = {title: book.title, img : book.thumbnail};
+                    $http.put('/addBook', book).success(function(data){
+                        console.log(data);
+                    });
+
+                    alert("Book successfully added");
                 }
             }
         ]);
