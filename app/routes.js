@@ -44,7 +44,7 @@ module.exports = function(app, passport) {
     });
 
     app.get('/search', function (req, res) {
-        res.render('search.ejs');
+        res.render('search.ejs',{user : req.user});
 
     })
     
